@@ -1,0 +1,23 @@
+receivers:
+  otlpgrpc:
+    endpoint: ":4319"     # CHANGE THIS
+
+processors:
+  spanmetrics: {}
+
+  summarizer:
+    window_seconds: 60
+
+  vectorizer:
+    mode: hash
+
+exporters:
+  weaviate:
+    endpoint: "http://localhost:8080"
+    class: "ObservabilityEvent"
+
+pipelines:
+  observability:
+    receivers: [otlpgrpc]
+    processors: [spanmetrics, summarizer, vectorizer]
+    exporters: [weaviate]
